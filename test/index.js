@@ -1,8 +1,9 @@
 import assert from 'assert';
-import brawl from '../lib';
+import Person from '../lib';
 
 describe('brawl', function () {
   it('should have unit test!', function () {
-    assert(brawl, 'we expected this package author to add actual unit tests.');
+    const dude = new Person('Nico');
+    assert(dude.getName() === 'Nico', 'we expected this package author to add actual unit tests.');
   });
 });
