@@ -2,8 +2,8 @@
   "name": "brawl",
   "version": "0.0.0",
   "description": "senseless cardgames",
-  "homepage": "http://github.com/brawl-game",
-  "repository": "brawl-game/brawl",
+  "homepage": "http://github.com/brawl-game/brawl-module",
+  "repository": "brawl-game/brawl-module",
   "author": {
     "name": "Nico Hämäläinen",
     "email": "nico@sizeof.io",
