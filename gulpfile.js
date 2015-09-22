@@ -7,7 +7,6 @@ var mocha            = require('gulp-mocha');
 var istanbul         = require('gulp-istanbul');
 var nsp              = require('gulp-nsp');
 var plumber          = require('gulp-plumber');
-var coveralls        = require('gulp-coveralls');
 var babel            = require('gulp-babel');
 var isparta          = require('isparta');
 var notify           = require("gulp-notify");
@@ -42,9 +41,7 @@ var config = {
 
   },
   // Coveralls path
-  coveralls: {
-    lcovFile: 'coverage/lcov.info'
-  }
+  coverageFile: 'coverage/lcov.info'
 };
 
 // Lint
@@ -83,16 +80,6 @@ gulp.task('test', ['pre-test'], function (cb) {
     .on('end', function () {
       cb(mochaErr);
     });
-});
-
-// Send coveralls reports
-gulp.task('coveralls', ['test'], function () {
-  if (!process.env.CI) {
-    return;
-  }
-
-  return gulp.src(config.coveralls.lcovFile)
-    .pipe(coveralls());
 });
 
 // Babel transpiler
