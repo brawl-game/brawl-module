@@ -9,8 +9,6 @@ var nsp              = require('gulp-nsp');
 var plumber          = require('gulp-plumber');
 var babel            = require('gulp-babel');
 var isparta          = require('isparta');
-var notify           = require("gulp-notify");
-var notifierReporter = require('mocha-notifier-reporter');
 
 // Initialize the babel transpiler
 require('babel-core/register');
@@ -29,7 +27,7 @@ var config = {
   },
   // Test runner
   mocha: {
-    reporter: notifierReporter.decorate('spec')
+    reporter: 'spec'
   },
   // Code coverage
   istanbul: {
