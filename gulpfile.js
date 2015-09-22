@@ -74,7 +74,6 @@ gulp.task('test', ['pre-test'], function (cb) {
       mochaErr = err;
     })
     .pipe(istanbul.writeReports())
-    .pipe(notify(""))
     .on('end', function () {
       cb(mochaErr);
     });
