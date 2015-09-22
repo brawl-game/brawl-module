@@ -1,68 +1,105 @@
-var path = require('path');
-var gulp = require('gulp');
-var eslint = require('gulp-eslint');
+// Dependencies
+var path             = require('path');
+var gulp             = require('gulp');
+var eslint           = require('gulp-eslint');
 var excludeGitignore = require('gulp-exclude-gitignore');
-var mocha = require('gulp-mocha');
-var istanbul = require('gulp-istanbul');
-var nsp = require('gulp-nsp');
-var plumber = require('gulp-plumber');
-var coveralls = require('gulp-coveralls');
-var babel = require('gulp-babel');
-var isparta = require('isparta');
+var mocha            = require('gulp-mocha');
+var istanbul         = require('gulp-istanbul');
+var nsp              = require('gulp-nsp');
+var plumber          = require('gulp-plumber');
+var coveralls        = require('gulp-coveralls');
+var babel            = require('gulp-babel');
+var isparta          = require('isparta');
+var notify           = require("gulp-notify");
+var notifierReporter = require('mocha-notifier-reporter');
 
-// Initialize the babel transpiler so ES2015 files gets compiled
-// when they're loaded
+// Initialize the babel transpiler
 require('babel-core/register');
 
+// Configuration
+var config = {
+  // Main package.json file
+  package: 'package.json',
+  // Glob patterns for source files
+  globs: {
+    scripts: 'lib/**/*.js',
+    tests: 'test/**/*.js'
+  },
+  dirs: {
+    dist: 'dist'
+  },
+  // Test runner
+  mocha: {
+    reporter: notifierReporter.decorate('spec')
+  },
+  // Code coverage
+  istanbul: {
+    includeUntested: true,
+    instrumenter: isparta.Instrumenter
+  },
+  // ESLint options
+  eslint: {
+
+  },
+  // Coveralls path
+  coveralls: {
+    lcovFile: 'coverage/lcov.info'
+  }
+};
+
+// Lint
 gulp.task('static', function () {
-  return gulp.src('**/*.js')
+  return gulp.src(config.globs.scripts)
     .pipe(excludeGitignore())
-    .pipe(eslint())
+    .pipe(eslint(config.eslint))
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
 });
 
+// Node security project
 gulp.task('nsp', function (cb) {
-  nsp('package.json', cb);
+  nsp(config.package, cb);
 });
 
+// Prepare instanbul instrumenter
 gulp.task('pre-test', function () {
-  return gulp.src('lib/**/*.js')
-    .pipe(istanbul({
-      includeUntested: true,
-      instrumenter: isparta.Instrumenter
-    }))
+  return gulp.src(config.globs.scripts)
+    .pipe(istanbul(config.istanbul))
     .pipe(istanbul.hookRequire());
 });
 
+// Run Mocha tests
 gulp.task('test', ['pre-test'], function (cb) {
   var mochaErr;
 
-  gulp.src('test/**/*.js')
+  gulp.src(config.globs.tests)
     .pipe(plumber())
-    .pipe(mocha({reporter: 'spec'}))
+    .pipe(mocha(config.mocha))
     .on('error', function (err) {
       mochaErr = err;
     })
     .pipe(istanbul.writeReports())
+    .pipe(notify(""))
     .on('end', function () {
       cb(mochaErr);
     });
 });
 
+// Send coveralls reports
 gulp.task('coveralls', ['test'], function () {
   if (!process.env.CI) {
     return;
   }
 
-  return gulp.src(path.join(__dirname, 'coverage/lcov.info'))
+  return gulp.src(config.coveralls.lcovFile)
     .pipe(coveralls());
 });
 
+// Babel transpiler
 gulp.task('babel', function () {
-  return gulp.src('lib/**/*.js')
+  return gulp.src(config.globs.scripts)
     .pipe(babel())
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest(config.dirs.dist));
 });
 
 gulp.task('prepublish', ['nsp', 'babel']);

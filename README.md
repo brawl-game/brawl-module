@@ -24,9 +24,9 @@ MIT © [Nico Hämäläinen](http://sizeof.io/)
 
 [npm-image]: https://badge.fury.io/js/brawl.svg
 [npm-url]: https://npmjs.org/package/brawl
-[travis-image]: https://travis-ci.org/brawl-game/brawl-module.svg?branch=master
+[travis-image]: https://travis-ci.org/brawl-game/brawl-module.svg?branch=develop
 [travis-url]: https://travis-ci.org/brawl-game/brawl-module
 [daviddm-image]: https://david-dm.org/brawl-game/brawl-module.svg?theme=shields.io
 [daviddm-url]: https://david-dm.org/brawl-game/brawl-module
-[coveralls-image]: https://coveralls.io/repos/brawl-game/brawl-module/badge.svg
+[coveralls-image]: https://coveralls.io/repos/brawl-game/brawl-module/badge.svg?branch=develop&service=github
 [coveralls-url]: https://coveralls.io/r/brawl-game/brawl-module
